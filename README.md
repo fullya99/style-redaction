@@ -22,6 +22,21 @@ mkdir -p ~/.claude/skills
 cp -r skills/style-redaction ~/.claude/skills/
 ```
 
+## Claude web et Cowork
+
+Claude Chat n'installe pas de plugin, mais il installe un skill. L'archive est attachée à la
+[dernière release](https://github.com/fullya99/style-redaction/releases/latest).
+
+1. Active **Code execution and file creation** dans tes réglages, sinon la section n'apparaît pas.
+2. Réglages → **Capacités** → **Skills** → **Add Skill** → **Upload skill**.
+3. Dépose `style-redaction.zip`, puis active l'interrupteur.
+
+Le skill est partagé entre Claude Chat et Cowork, c'est la même bibliothèque personnelle. En
+Enterprise, le propriétaire doit d'abord autoriser Skills et Code execution pour l'organisation.
+
+Le contrôle mécanique ne tournera pas là-bas, sa boucle de résolution ne connaît pas l'emplacement où
+Claude web monte les skills. Tu gardes la règle et les quatre questions de relecture.
+
 ## Hermes Agent et OpenClaw
 
 Le skill suit le standard [agentskills.io](https://agentskills.io/specification), donc il marche sur
