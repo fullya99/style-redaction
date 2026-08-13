@@ -1,6 +1,13 @@
 ---
 name: style-redaction
 description: Règle de rédaction en français, à appliquer dès qu'un texte destiné à être lu est produit ou relu. Impose un ton direct et humain, et supprime tous les marqueurs de texte généré par IA (tiret cadratin, point-virgule, virgule d'Oxford, rythme ternaire, "ce n'est pas X c'est Y", crucial, essentiel, notamment, par ailleurs, participes présents décoratifs, anglicismes). À charger AVANT d'écrire, pas après. Se déclenche sur : rédiger ou écrire ou reformuler un document, une doc, un README, un rapport, une analyse, une synthèse, un compte-rendu, un article, un post, un mail, une note, une fiche, une description, du contenu. Se déclenche aussi sur : humaniser, déslopifier, "ça fait trop IA", "rends ça plus naturel", "relis mon texte", "corrige le style", ton, formulation, tournure.
+version: 1.1.0
+author: fullya99
+license: MIT
+platforms: [linux, macos, windows]
+metadata:
+  hermes:
+    tags: [writing, style, french, review, anti-slop]
 ---
 
 # Style de rédaction
@@ -168,13 +175,17 @@ bash "$SKILL/scripts/verif-style.sh" --strict <fichier>   # sortie 1 s'il reste 
 SKILL="$(for d in "$CLAUDE_PLUGIN_ROOT/skills/style-redaction" \
   ".claude/skills/style-redaction" "$HOME/.claude/skills/style-redaction" \
   $(find "$HOME/.claude/plugins/cache" -maxdepth 5 -type d -path '*/skills/style-redaction' 2>/dev/null | sort -r) \
-  $(find "$HOME/.claude/plugins/marketplaces" -maxdepth 5 -type d -path '*/skills/style-redaction' 2>/dev/null); do
+  $(find "$HOME/.claude/plugins/marketplaces" -maxdepth 5 -type d -path '*/skills/style-redaction' 2>/dev/null) \
+  $(find "$HOME/.hermes/skills" "$HOME/.openclaw" -maxdepth 4 -type d -name style-redaction 2>/dev/null); do
   [ -f "$d/scripts/verif-style.sh" ] && echo "$d" && break
 done)"
 ```
 
-`cache/` avant `marketplaces/` : le cache porte la version installée, le clone du marketplace porte
-la pointe de `master`. Les deux existent en parallèle et divergent dès que le dépôt avance.
+Trois plateformes couvertes par une seule boucle, parce que ce skill est au format agentskills.io et
+qu'il s'installe pareil partout. Chez Claude Code, `cache/` passe avant `marketplaces/` : le cache
+porte la version installée, le clone du marketplace la pointe de `master`, et les deux divergent dès
+que le dépôt avance. Les deux dernières entrées couvrent Hermes Agent, `~/.hermes/skills/`, et
+OpenClaw, `~/.openclaw/workspace/skills/`.
 
 Si la résolution échoue, tu relis à la main avec les quatre questions ci-dessous. Le script fait
 gagner du temps, il n'est pas la règle.

@@ -22,6 +22,26 @@ mkdir -p ~/.claude/skills
 cp -r skills/style-redaction ~/.claude/skills/
 ```
 
+## Hermes Agent et OpenClaw
+
+Le skill suit le standard [agentskills.io](https://agentskills.io/specification), donc il marche sur
+les deux, script de contrôle compris.
+
+```bash
+# Hermes Agent
+cp -r skills/style-redaction ~/.hermes/skills/writing/style-redaction
+
+# OpenClaw
+cp -r skills/style-redaction ~/.openclaw/workspace/skills/style-redaction
+```
+
+Chez Hermes il devient une slash command au passage, `/style-redaction`, les skills installés y sont
+exposés comme commandes. Si ton workspace OpenClaw n'est pas à l'emplacement par défaut, regarde
+`agents.defaults.workspace` dans `~/.openclaw/openclaw.json`.
+
+Une seule règle, trois plateformes. Il n'y a pas de version dédiée par agent, ça donnerait deux
+copies qui finiraient par diverger.
+
 ## Ce qu'il fait
 
 Ton direct, du concret plutôt que du général. Pas de tiret cadratin, pas de point-virgule, pas de
