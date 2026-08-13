@@ -157,8 +157,23 @@ l'air bâclé.
 Contrôle mécanique, il prend dix secondes :
 
 ```bash
-bash scripts/verif-style.sh <fichier>
+bash "$SKILL/scripts/verif-style.sh" <fichier|repertoire>
+bash "$SKILL/scripts/verif-style.sh" --strict <fichier>   # sortie 1 s'il reste une alerte
 ```
+
+`$SKILL` est le répertoire de ce skill. Tu travailles depuis le projet, pas depuis le skill, donc
+`scripts/verif-style.sh` tout court ne résout pas. Résous-le une fois, avant le premier appel :
+
+```bash
+SKILL="$(for d in "$CLAUDE_PLUGIN_ROOT/skills/style-redaction" \
+  ".claude/skills/style-redaction" "$HOME/.claude/skills/style-redaction" \
+  $(find "$HOME/.claude/plugins" -maxdepth 7 -type d -path '*/skills/style-redaction' 2>/dev/null); do
+  [ -f "$d/scripts/verif-style.sh" ] && echo "$d" && break
+done)"
+```
+
+Si la résolution échoue, tu relis à la main avec les quatre questions ci-dessous. Le script fait
+gagner du temps, il n'est pas la règle.
 
 Puis quatre questions, celles que le script ne sait pas poser.
 
