@@ -167,10 +167,14 @@ bash "$SKILL/scripts/verif-style.sh" --strict <fichier>   # sortie 1 s'il reste 
 ```bash
 SKILL="$(for d in "$CLAUDE_PLUGIN_ROOT/skills/style-redaction" \
   ".claude/skills/style-redaction" "$HOME/.claude/skills/style-redaction" \
-  $(find "$HOME/.claude/plugins" -maxdepth 7 -type d -path '*/skills/style-redaction' 2>/dev/null); do
+  $(find "$HOME/.claude/plugins/cache" -maxdepth 5 -type d -path '*/skills/style-redaction' 2>/dev/null | sort -r) \
+  $(find "$HOME/.claude/plugins/marketplaces" -maxdepth 5 -type d -path '*/skills/style-redaction' 2>/dev/null); do
   [ -f "$d/scripts/verif-style.sh" ] && echo "$d" && break
 done)"
 ```
+
+`cache/` avant `marketplaces/` : le cache porte la version installée, le clone du marketplace porte
+la pointe de `master`. Les deux existent en parallèle et divergent dès que le dépôt avance.
 
 Si la résolution échoue, tu relis à la main avec les quatre questions ci-dessous. Le script fait
 gagner du temps, il n'est pas la règle.
