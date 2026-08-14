@@ -1,7 +1,7 @@
 ---
 name: style-redaction
 description: "Règle de rédaction en français, à appliquer dès qu'un texte destiné à être lu est produit ou relu. Impose un ton direct et humain, et supprime tous les marqueurs de texte généré par IA (tiret cadratin, point-virgule, virgule d'Oxford, rythme ternaire, \"ce n'est pas X c'est Y\", crucial, essentiel, notamment, par ailleurs, participes présents décoratifs, anglicismes). À charger AVANT d'écrire, pas après. Se déclenche sur : rédiger ou écrire ou reformuler un document, une doc, un README, un rapport, une analyse, une synthèse, un compte-rendu, un article, un post, un mail, une note, une fiche, une description, du contenu. Se déclenche aussi sur : humaniser, déslopifier, \"ça fait trop IA\", \"rends ça plus naturel\", \"relis mon texte\", \"corrige le style\", ton, formulation, tournure."
-version: 1.2.0
+version: 1.2.1
 author: fullya99
 license: MIT
 platforms: [linux, macos, windows]

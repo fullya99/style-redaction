@@ -91,7 +91,11 @@ for f in $(fichiers | sort); do
   signale "$f" "tiret cadratin ou demi-cadratin" '—|–'
   signale "$f" "point-virgule" ';'
   signale "$f" "points de suspension en un seul caractere" '…'
-  signale "$f" "guillemets droits au lieu de « »" '"[A-Za-zÀ-ÿ]'
+  # La classe [[:alpha:]] remplace une plage [A-Za-zÀ-ÿ] qui echouait en
+  # « Invalid collation character » sur les locales ou À et ÿ ne sont pas
+  # collationnables. Le controle ne tournait alors pas du tout, et seule cette
+  # erreur de grep le signalait. Vu sur un banc d'essai Codex le 2026-08-14.
+  signale "$f" "guillemets droits au lieu de « »" '"[[:alpha:]]'
   # La virgule d'Oxford ne se detecte pas de facon fiable : « A, B, et C » est
   # fautif, mais « il se survole, et au bout d'un moment on arrete » est correct.
   # Aucune regex ne separe les deux, donc c'est un indice, pas une alerte.

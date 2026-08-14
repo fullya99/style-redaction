@@ -1,5 +1,5 @@
 {
   "name": "style-redaction",
   "description": "Règle de rédaction en français. Ton direct et suppression de tous les marqueurs de texte généré, avec un contrôle mécanique.",
-  "version": "1.2.0"
+  "version": "1.2.1"
 }
