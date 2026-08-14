@@ -1,7 +1,7 @@
 ---
 name: style-redaction
 description: "Règle de rédaction en français, à appliquer dès qu'un texte destiné à être lu est produit ou relu. Impose un ton direct et humain, et supprime tous les marqueurs de texte généré par IA (tiret cadratin, point-virgule, virgule d'Oxford, rythme ternaire, \"ce n'est pas X c'est Y\", crucial, essentiel, notamment, par ailleurs, participes présents décoratifs, anglicismes). À charger AVANT d'écrire, pas après. Se déclenche sur : rédiger ou écrire ou reformuler un document, une doc, un README, un rapport, une analyse, une synthèse, un compte-rendu, un article, un post, un mail, une note, une fiche, une description, du contenu. Se déclenche aussi sur : humaniser, déslopifier, \"ça fait trop IA\", \"rends ça plus naturel\", \"relis mon texte\", \"corrige le style\", ton, formulation, tournure."
-version: 1.2.1
+version: 1.2.2
 author: fullya99
 license: MIT
 platforms: [linux, macos, windows]
@@ -176,7 +176,8 @@ ANCETRES="$(d="$PWD"; while [ "$d" != "/" ]; do echo "$d/.agents/skills/style-re
 
 SKILL="$(for d in "$CLAUDE_PLUGIN_ROOT/skills/style-redaction" \
   ".claude/skills/style-redaction" $ANCETRES \
-  "$HOME/.claude/skills/style-redaction" "$HOME/.agents/skills/style-redaction" \
+  "$HOME/.claude/skills/style-redaction" \
+  "$HOME/.codex/skills/style-redaction" "$HOME/.agents/skills/style-redaction" \
   $(find "$HOME/.claude/plugins/cache" -maxdepth 5 -type d -path '*/skills/style-redaction' 2>/dev/null | sort -r) \
   $(find "$HOME/.claude/plugins/marketplaces" -maxdepth 5 -type d -path '*/skills/style-redaction' 2>/dev/null) \
   $(find "$HOME/.hermes/skills" "$HOME/.openclaw" -maxdepth 4 -type d -name style-redaction 2>/dev/null) \
@@ -189,6 +190,11 @@ Quatre plateformes couvertes par une seule boucle, parce que ce skill est au for
 et qu'il s'installe pareil partout. L'ordre suit les portées : le plugin d'abord, puis le projet
 pour Claude Code et pour Codex, puis l'utilisateur pour les deux, puis les copies de plugin propres
 à Claude Code.
+
+Codex a deux répertoires de portée utilisateur, `~/.codex/skills/` où son installeur dépose, et
+`~/.agents/skills/` du standard ouvert. Les deux sont scannés, vérifié le 2026-08-14. Le premier
+passe avant parce qu'il porte la version que l'utilisateur a réellement installée, quand l'autre
+peut garder une copie posée à la main et devenue vieille.
 
 Chez Claude Code, `cache/` passe avant `marketplaces/` : le cache porte la version installée, le clone
 du marketplace la pointe de `master`, et les deux divergent dès que le dépôt avance.
