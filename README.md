@@ -22,6 +22,13 @@ mkdir -p ~/.claude/skills
 cp -r skills/style-redaction ~/.claude/skills/
 ```
 
+Sur Codex d'OpenAI, même standard, dossier différent :
+
+```bash
+cp -r skills/style-redaction .agents/skills/      # portée dépôt
+cp -r skills/style-redaction ~/.agents/skills/    # portée utilisateur
+```
+
 ## Claude web et Cowork
 
 Claude Chat n'installe pas de plugin, mais il installe un skill. L'archive est attachée à la
