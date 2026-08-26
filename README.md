@@ -1,12 +1,33 @@
 # style-redaction
 
-Un plugin Claude Code qui empêche tout ce que tu écris de ressembler à du texte généré. En français.
+Un plugin Claude Code qui empêche tout ce que tu écris de ressembler à du texte généré. En
+français, en anglais, ou les deux dans le même dépôt.
 
 Il se charge dès qu'un texte destiné à être lu se produit ou se relit. Documentation, README,
 rapport, analyse, synthèse, article, note, mail. Ou sur demande directe, du genre « relis ça, ça
 fait trop IA ».
 
-Il ne touche pas au code, ni aux noms de variables.
+## La langue se décide zone par zone
+
+Un projet n'a pas une langue, il en a une par zone, et c'est là que ce genre de règle dérape.
+Une doc en français ne veut pas dire des constantes en français. Le skill lit un fichier
+`.style-redaction.yml` à la racine du dépôt :
+
+```yaml
+prose: fr          # doc, README, rapport, note, mail
+code: en           # fonctions, variables, constantes, noms de fichiers
+commentaires: en
+interface: fr      # libellés affichés, messages d'erreur, logs
+git: en            # commits, branches, titres de PR
+fautes: oui        # fautes volontaires dans la prose
+```
+
+Le même bloc se pose dans le `CLAUDE.md` du projet, sous un marqueur `<!-- style-redaction -->`,
+si tu préfères tout garder au même endroit. Le fichier gagne quand les deux existent.
+
+Sans rien de déclaré, le skill regarde le dépôt et te propose sa lecture en une question. La
+config s'écrit avec ta réponse. Il ne devine jamais en silence. Et quoi qu'il y ait dans la config, le code
+déjà écrit gagne : on ne renomme pas un symbole pour changer sa langue.
 
 ## Installation
 
@@ -42,7 +63,7 @@ Le skill est partagé entre Claude Chat et Cowork, c'est la même bibliothèque 
 Enterprise, le propriétaire doit d'abord autoriser Skills et Code execution pour l'organisation.
 
 Le contrôle mécanique ne tournera pas là-bas, sa boucle de résolution ne connaît pas l'emplacement où
-Claude web monte les skills. Tu gardes la règle et les quatre questions de relecture.
+Claude web monte les skills. Tu gardes la règle et les cinq questions de relecture.
 
 ## Hermes Agent et OpenClaw
 
@@ -66,10 +87,14 @@ copies qui finiraient par diverger.
 
 ## Ce qu'il fait
 
-Ton direct, du concret plutôt que du général. Pas de tiret cadratin, pas de point-virgule, pas de
-virgule d'Oxford, pas de rythme ternaire, pas de « ce n'est pas X, c'est Y », pas de vocabulaire
+Ton direct, du concret plutôt que du général. En français : pas de tiret cadratin, pas de
+point-virgule, pas de virgule d'Oxford, pas de « ce n'est pas X, c'est Y », pas de vocabulaire
 passe-partout du genre « crucial » ou « par ailleurs », pas d'anglicisme de modèle entraîné en
 anglais.
+
+En anglais, même discipline et autres tics. L'em dash reste interdit, la virgule d'Oxford et la
+capitale de titre redeviennent correctes, et la liste de mots change : `delve`, `robust`,
+`seamless`, `leverage`, `tapestry`, *in today's fast-paced world*, *it's not just X, it's Y*.
 
 La partie qui compte le plus est aussi la plus dure à voir sur son propre texte : le rythme
 ternaire, les phrases toutes de la même longueur, les participes présents décoratifs, les
@@ -84,15 +109,20 @@ s'incrustent dans la structure et pas seulement dans les mots.
 ```bash
 SR=skills/style-redaction                 # ou ~/.claude/skills/style-redaction
 bash $SR/scripts/verif-style.sh <fichier|repertoire> [...]
-bash $SR/scripts/verif-style.sh --strict README.md   # sortie 1 s'il reste une alerte
+bash $SR/scripts/verif-style.sh --strict README.md    # sortie 1 s'il reste une alerte
+bash $SR/scripts/verif-style.sh --langue en docs/     # force l'anglais
 ```
 
-Le script attrape dix familles de marqueurs, celles qui se détectent sans comprendre le texte. Il
-ignore le contenu des blocs de code, parce qu'une commande shell a le droit de contenir un
-point-virgule. `--strict` en fait un contrôle de CI.
+Le script attrape une dizaine de familles de marqueurs, celles qui se détectent sans comprendre le
+texte. Il ignore le contenu des blocs de code, parce qu'une commande shell a le droit de contenir
+un point-virgule. `--strict` en fait un contrôle de CI.
+
+Sans `--langue`, il lit la config du projet, et à défaut il devine fichier par fichier en comptant
+les mots outils. Un dépôt qui mélange une doc française et une doc anglaise se contrôle en un seul
+passage, chaque fichier avec les motifs de sa langue.
 
 Le rythme ternaire et l'uniformité de longueur des phrases ne se grepent pas, ils se relisent. Le
-skill pose les quatre questions qui restent après le script.
+skill pose les cinq questions qui restent après le script.
 
 Bash seul suffit. Aucune dépendance, aucun serveur MCP.
 
@@ -102,7 +132,8 @@ Il ne réécrit pas ton style à toi. Un texte qui a un auteur se lit mieux qu'u
 skill pousse à assumer un point de vue plutôt qu'à le lisser.
 
 Il ne s'applique pas au code. Un identifiant en anglais avec un tiret dedans n'est pas une faute de
-français.
+français, et la ligne `code` de la config n'existe que pour choisir la langue des symboles à venir,
+jamais pour renommer ceux qui sont là.
 
 Il ne remplace pas la relecture. Le script ne voit que ce qui se compte.
 
